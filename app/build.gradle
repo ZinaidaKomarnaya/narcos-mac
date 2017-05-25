@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+    defaultConfig {
+        applicationId "com.example.android.testing.uiautomator.BasicSample"
+        minSdkVersion 18
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+    }
+}
+
+//dependencies {
+//    compile 'com.google.guava:guava:18.0'
+    // Testing-only dependencies
+    // Force usage of support annotations in the test app, since it is internally used by the runner module.
+//    androidTestCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion;
+//    androidTestCompile 'com.android.support.test:runner:' + rootProject.runnerVersion;
+    // UiAutomator Testing
+//    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:' + rootProject.uiautomatorVersion;
+//    androidTestCompile 'org.hamcrest:hamcrest-integration:1.3'
+//    compile 'org.jetbrains:annotations-java5:15.0'
+//}
+
+//mainClassName = 'com.example.android.testing.uiautomator.BasicSample'
+
+dependencies {
+    //compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
+}
+
+android {
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+}

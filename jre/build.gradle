@@ -1,0 +1,14 @@
+apply plugin: 'application'
+apply plugin: 'java'
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+mainClassName = 'ru.gg.MainJre'
+
+//extra:
+//dist.dependsOn classes
+
+dependencies {
+}

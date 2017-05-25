@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxifierProfile version="101" platform="Windows" product_id="0" product_minver="310">
+  <Options>
+    <Resolve>
+      <AutoModeDetection enabled="true" />
+      <ViaProxy enabled="false">
+        <TryLocalDnsFirst enabled="false" />
+      </ViaProxy>
+      <ExclusionList>%ComputerName%; localhost; *.local</ExclusionList>
+    </Resolve>
+    <Encryption mode="disabled" /> <!--Encription mode-->
+    <HttpProxiesSupport enabled="false" />
+    <HandleDirectConnections enabled="false" />
+    <ConnectionLoopDetection enabled="true" />
+    <ProcessServices enabled="true" />
+    <ProcessOtherUsers enabled="true" />
+  </Options>
+
+  <ProxyList>
+
+  </ProxyList>
+
+  <ChainList>
+    <Chain id="101" type="simple">
+      <Name>chain1</Name>
+      <Proxy enabled="true">103</Proxy>
+    </Chain>
+    <!--<Chain id="102" type="redundancy">-->
+      <!--<Name>New</Name>-->
+      <!--<Proxy enabled="true">107</Proxy>-->
+      <!--<Proxy enabled="true">105</Proxy>-->
+      <!--<RedundancyTimeout>30</RedundancyTimeout>-->
+      <!--<RedundancyTryDirect>false</RedundancyTryDirect>-->
+    <!--</Chain>-->
+  </ChainList>
+
+  <RuleList>
+    <Rule enabled="true">
+      <Name>Localhost</Name>
+      <Targets>localhost; 127.0.0.1; %ComputerName%</Targets>
+      <Action type="Direct" />
+    </Rule>
+    <Rule enabled="true">
+      <Name>Bluestacks</Name>
+      <Applications>hd-agent.exe; hd-frontend.exe; hd-network.exe</Applications>
+      <Action type="Chain">101</Action>
+      <!--<Action type="Proxy">103</Action>-->
+    </Rule>
+    <Rule enabled="true">
+      <Name>Default</Name>
+      <Action type="Direct" />
+    </Rule>
+  </RuleList>
+</ProxifierProfile>
