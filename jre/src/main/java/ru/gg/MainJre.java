@@ -51,22 +51,14 @@ public static void main(String[] args) {
 	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	frame.add(panel);
 	panel.add(new JLabel(new ImageIcon("main_theme.png")));
-	panel.add(new Label("1. Запустите Bluestacks вручную"));
-	btn = new MyButton("2. Подсоединитесь к bluestacks нажав эту кнопку", new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			statusLabel.setText("4. Статус: ожидание");
-			btn.setVisible(false);
-			fullCycle();
-		}
-	});
-	panel.add(btn);
-	panel.add(new Label("3. Дождитесь появления статуса"));
-	statusLabel = new Label();
+	panel.add(new Label("1. Bluestacks уже должен быть запущен"));
+	panel.add(new Label("2. Дождитесь обновления статуса"));
+	statusLabel = new Label("Статус: ожидание");
 	serverStatus = new Label();
 	panel.add(statusLabel);
 	panel.add(serverStatus);
 	frame.setSize(601, 601);
+	fullCycle();
 }
 
 private static void fullCycle() {
@@ -80,7 +72,7 @@ private static void fullCycle() {
 public static boolean isWorking() {
 	LibAll.HttpRequest.Response response = LibAll.request(jreParams.statusUrl).log(MainJre.log).attempts(3).get();
 	boolean result = response.success && "working".equals(response.str);
-	serverStatus.setText("5. Состояние сервера narcos-mac.herokuapp.com : " + response.str);
+	serverStatus.setText("Состояние сервера narcos-mac.herokuapp.com : " + response.str);
 	return result;
 }
 
