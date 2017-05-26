@@ -141,7 +141,7 @@ private static void stopBluestacks() {
 private static boolean startBluestacksAndLaunchGradleUiTest() {
 	log.info("start bluestacks with gradle ui test, wait device");
 	if(true) {
-		LibAll.nativeCmd("open Applications/BlueStacks.app/").execute();
+		LibAll.nativeCmd("open /Applications/BlueStacks.app/").log(log).execute();
 	}
 	LibAll.nativeCmd(jreParams.adbPath + " wait-for-device").log(log).execute();
 	while(!LibAllGwt.strEquals("1", LibAll.nativeCmd(jreParams.adbPath + " shell getprop sys.boot_completed").execute().resultStr.trim())) {
