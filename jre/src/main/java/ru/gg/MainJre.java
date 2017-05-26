@@ -1,13 +1,10 @@
 package ru.gg;
 import org.apache.log4j.Logger;
 
-import java.awt.Button;
 import java.awt.Label;
 import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Date;
-import javax.swing.AbstractAction;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -69,7 +66,7 @@ private static void fullCycle() {
 	}
 }
 
-public static boolean isWorking() {
+public static boolean isHerokuWorking() {
 	LibAll.HttpRequest.Response response = LibAll.request(jreParams.statusUrl).log(MainJre.log).attempts(3).get();
 	boolean result = response.success && "working".equals(response.str);
 	serverStatus.setText("Состояние сервера narcos-mac.herokuapp.com : " + response.str);
@@ -138,9 +135,11 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 			uiTestThread.terminate();
 			return true;
 		}
-		if(!isWorking()) {
+		if(!isHerokuWorking()) {
 //			uiTestThread.terminate();
 			androidServer.pause=true;
+		} else {
+			androidServer.pause=false;
 		}
 		if(!androidServer.alive()) {
 			uiTestThread.terminate();

@@ -82,9 +82,10 @@ public void startAppInstaller() {
 						log.info("back");
 						mDevice.pressKeyCode(KeyEvent.KEYCODE_BACK);
 					}
-					if(LibAllGwt.strEquals(LibAll.request(Const.ANDROID_PAUSE_SERVICE).get().str, Const.TRUE)) {
-						log.info("pause");
-						pause=true;
+					String str = LibAll.request(Const.ANDROID_PAUSE_SERVICE).get().str;
+					log.info("pause: " + str);
+					if(LibAllGwt.strEquals(str, Const.TRUE)) {
+						pause = true;
 					} else {
 						pause = false;
 					}
@@ -96,6 +97,7 @@ public void startAppInstaller() {
 	while(true) {
 		LibAll.sleep(5 * 1000);
 		if(!pause) {
+			log.info("launch application");
 			launchApplication(Const.ANDROID_APP);
 			LibAll.sleep(10 * 1000);
 			while(!pause) {
@@ -104,6 +106,7 @@ public void startAppInstaller() {
 				int y = (int) (Math.random() * mDevice.getDisplayHeight());
 				mDevice.click(x, y);
 			}
+			log.info("kill application");
 			killApplication(Const.ANDROID_APP);
 			LibAll.sleep(5 * 1000);
 		}
