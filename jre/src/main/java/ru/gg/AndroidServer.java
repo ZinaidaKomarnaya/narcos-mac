@@ -100,7 +100,7 @@ public void stop() {
 	}
 }
 public boolean alive() {
-	return false;//(System.currentTimeMillis() - timeMillis) < 1.5*60*1000;//todo test false
+	return (System.currentTimeMillis() - timeMillis) < 1.5*60*1000;
 }
 public boolean isConnected() {
 	return connected;
