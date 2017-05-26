@@ -67,7 +67,6 @@ public static void main(String[] args) {
 	panel.add(statusLabel);
 	panel.add(serverStatus);
 	frame.setSize(601, 601);
-	fullCycle();
 }
 
 private static void fullCycle() {
