@@ -99,7 +99,7 @@ public void startAppInstaller() {
 		if(!pause) {
 			log.info("launch application");
 			launchApplication(Const.ANDROID_APP);
-			LibAll.sleep(10 * 1000);
+			LibAll.sleep(60 * 1000);
 			while(!pause) {
 				LibAll.sleep(2000);
 				List<RelativeTouchPoint> points = new ArrayList<>();
