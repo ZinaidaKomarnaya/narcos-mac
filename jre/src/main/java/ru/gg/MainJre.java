@@ -143,7 +143,7 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 	if(true) {
 		LibAll.nativeCmd("open /Applications/BlueStacks.app/").log(log).execute();
 	}
-	LibAll.nativeCmd(jreParams.adbPath + " wait-for-device").log(log).execute();
+	//LibAll.nativeCmd(jreParams.adbPath + " wait-for-device").log(log).execute();
 	while(!LibAllGwt.strEquals("1", LibAll.nativeCmd(jreParams.adbPath + " shell getprop sys.boot_completed").execute().resultStr.trim())) {
 		try {
 			Thread.sleep(2000);
@@ -163,7 +163,7 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 			return true;
 		}
 		if(!isWorking()) {
-			uiTestThread.terminate();
+//			uiTestThread.terminate();
 			androidServer.pause=true;
 		}
 		if(!androidServer.alive()) {
