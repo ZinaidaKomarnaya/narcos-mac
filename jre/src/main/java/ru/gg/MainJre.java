@@ -24,6 +24,7 @@ private static JreParams jreParams = new JreParams();
 
 private static final Logger logger = Logger.getLogger(MainJre.class);
 public static Label statusLabel;
+public static MyButton btn;
 
 public static final ILog log = new ILog() {
 	@Override
@@ -51,17 +52,20 @@ public static void main(String[] args) {
 	frame.add(panel);
 	panel.add(new JLabel(new ImageIcon("main_theme.png")));
 	panel.add(new Label("1. Запустите Bluestacks вручную"));
-	panel.add(new MyButton("2. Подсоединитесь к bluestacks нажав эту кнопку", new ActionListener() {
+	btn = new MyButton("2. Подсоединитесь к bluestacks нажав эту кнопку", new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			statusLabel.setText("4. Статус: ожидание");
+			btn.setVisible(false);
 			fullCycle();
 		}
-	}));
+	});
+	panel.add(btn);
 	panel.add(new Label("3. Дождитесь появления статуса"));
-	statusLabel = new Label("4. Статус: ожидание");
+	statusLabel = new Label();
 	serverStatus = new Label();
-	panel.add(serverStatus);
 	panel.add(statusLabel);
+	panel.add(serverStatus);
 	frame.setSize(601, 601);
 	fullCycle();
 }
@@ -134,7 +138,6 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 	UITestThread uiTestThread = new UITestThread();
 	uiTestThread.start();
 	long startTime = getUnixTimeSec();
-	int waitSeconds = WAIT_ANDROID * 60;
 	while(true) {
 		LibAll.sleep(15 * 1000);
 		if(uiTestThread.isComplete()) {
@@ -152,7 +155,6 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 		}
 		if(androidServer.alive() && androidServer.isConnected()) {
 			statusLabel.setText("Статус: Успешно");
-
 		}
 	}
 }
