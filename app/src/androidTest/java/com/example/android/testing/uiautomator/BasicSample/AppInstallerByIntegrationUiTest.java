@@ -100,6 +100,8 @@ public void startAppInstaller() {
 			log.info("launch application");
 			launchApplication(Const.ANDROID_APP);
 			LibAll.sleep(60 * 1000);
+			ConcreteTouchPoint concretePt = new ConcreteTouchPoint(18, 206);
+			mDevice.click((int)(concretePt.getX()* mDevice.getDisplayWidth()), (int)(concretePt.getY()* mDevice.getDisplayHeight()));
 			while(!pause) {
 				LibAll.sleep(2000);
 				List<RelativeTouchPoint> points = new ArrayList<>();
