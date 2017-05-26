@@ -130,7 +130,7 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 	uiTestThread.start();
 	long startTime = getUnixTimeSec();
 	while(true) {
-		LibAll.sleep(15 * 1000);
+		LibAll.sleep(1 * 1000);
 		if(uiTestThread.isComplete()) {
 			uiTestThread.terminate();
 			return true;
