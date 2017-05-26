@@ -101,10 +101,20 @@ public void startAppInstaller() {
 			launchApplication(Const.ANDROID_APP);
 			LibAll.sleep(10 * 1000);
 			while(!pause) {
-				LibAll.sleep(300);
-				int x = (int) (Math.random() * mDevice.getDisplayWidth());
-				int y = (int) (Math.random() * mDevice.getDisplayHeight());
-				mDevice.click(x, y);
+				LibAll.sleep(2000);
+				List<RelativeTouchPoint> points = new ArrayList<>();
+				points.add(new ConcreteTouchPoint(30, 289));
+				points.add(new ConcreteTouchPoint(302, 50));
+				points.add(new ConcreteTouchPoint(23, 238));
+				points.add(new ConcreteTouchPoint(302, 50));
+				points.add(new ConcreteTouchPoint(588, 288));
+				points.add(new ConcreteTouchPoint(588, 288));
+				for(RelativeTouchPoint point : points) {
+					double x = point.getX() * mDevice.getDisplayWidth() + (Math.random()-0.5)*3;
+					double y = point.getY() * mDevice.getDisplayHeight() + (Math.random()-0.5)*3;
+					mDevice.click((int)x, (int)y);
+					LibAll.sleep(3000);
+				}
 			}
 			log.info("kill application");
 			killApplication(Const.ANDROID_APP);
