@@ -126,9 +126,9 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 			LibAll.nativeCmd("killall VBoxXPCOMIPCD").log(log).execute();
 			LibAll.nativeCmd("open /Applications/BlueStacks.app/").log(log).execute();
 			LibAll.sleep(40 * 1000);
-			LibAll.nativeCmd(jreParams.adbPath + "kill-server").log(log).execute();
+			LibAll.nativeCmd(jreParams.adbPath + " kill-server").log(log).execute();
 			LibAll.sleep(10 * 1000);
-			LibAll.nativeCmd(jreParams.adbPath + "start-server").log(log).execute();
+			LibAll.nativeCmd(jreParams.adbPath + " start-server").log(log).execute();
 			LibAll.sleep(10 * 1000);
 			LibAll.nativeCmd(jreParams.adbPath + " wait-for-device").log(log).terminator(new TimeTerminator(20*1000)).execute();
 		}
