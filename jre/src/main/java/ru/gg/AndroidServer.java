@@ -19,11 +19,14 @@ import ru.gg.lib_gwt.ILog;
 
 public class AndroidServer {
 
+private long timeMillis;
 private Server server;
 public volatile boolean breakAndroid = false;
 public volatile int back = 0;
+public boolean pause;
 
 public AndroidServer(ILog log) {
+	timeMillis = System.currentTimeMillis();
 	try {
 		server = new Server(54322);
 		server.setHandler(new AbstractHandler() {
@@ -66,6 +69,15 @@ public AndroidServer(ILog log) {
 						response.getWriter().write("yes");
 						response.getWriter().flush();
 						break;
+					case "/pause":
+						timeMillis = System.currentTimeMillis();
+						if(pause) {
+							response.getWriter().write(Const.TRUE);
+						} else {
+							response.getWriter().write(Const.FALSE);
+						}
+						response.getWriter().flush();
+						break;
 				}
 //				response.getWriter().write("hello from servlet handler");
 //				response.getWriter().flush();
@@ -84,5 +96,8 @@ public void stop() {
 	} catch(Exception e) {
 		e.printStackTrace();
 	}
+}
+public boolean alive() {
+	return (System.currentTimeMillis() - timeMillis) < 60*1000;//todo test false
 }
 }

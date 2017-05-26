@@ -13,8 +13,8 @@ public class UITestThread extends Thread {
     @Override
     public void run() {
         super.run();
-        LibAll.nativeCmd("gradlew app:clean");
-        LibAll.nativeCmd("gradlew cAT").path(new File(System.getProperty("user.dir")).getParentFile().getPath()).terminator(new ITerminator() {
+        LibAll.nativeCmd("./gradlew app:clean").execute();
+        LibAll.nativeCmd("./gradlew cAT").path(new File(System.getProperty("user.dir")).getParentFile().getPath()).terminator(new ITerminator() {
             @Override
             public boolean terminated() {
                 return terminate;
