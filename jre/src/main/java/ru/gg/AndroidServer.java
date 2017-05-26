@@ -24,6 +24,7 @@ private Server server;
 public volatile boolean breakAndroid = false;
 public volatile int back = 0;
 public boolean pause;
+private boolean connected;
 
 public AndroidServer(ILog log) {
 	timeMillis = System.currentTimeMillis();
@@ -70,6 +71,7 @@ public AndroidServer(ILog log) {
 						response.getWriter().flush();
 						break;
 					case "/pause":
+						connected = true;
 						timeMillis = System.currentTimeMillis();
 						if(pause) {
 							response.getWriter().write(Const.TRUE);
@@ -98,6 +100,9 @@ public void stop() {
 	}
 }
 public boolean alive() {
-	return (System.currentTimeMillis() - timeMillis) < 60*1000;//todo test false
+	return (System.currentTimeMillis() - timeMillis) < 1.5*60*1000;//todo test false
+}
+public boolean isConnected() {
+	return connected;
 }
 }

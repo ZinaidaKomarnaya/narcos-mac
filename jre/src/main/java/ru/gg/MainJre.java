@@ -2,11 +2,13 @@ package ru.gg;
 import org.apache.log4j.Logger;
 
 import java.awt.Button;
+import java.awt.Label;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import javax.swing.AbstractAction;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +23,8 @@ private static final int WAIT_ANDROID = Const.ONLY_LOGIN ? 7 : 11;
 private static JreParams jreParams = new JreParams();
 
 private static final Logger logger = Logger.getLogger(MainJre.class);
+public static Label statusLabel;
+
 public static final ILog log = new ILog() {
 	@Override
 	public String info(String s) {
@@ -34,6 +38,7 @@ public static final ILog log = new ILog() {
 	}
 };
 private static AndroidServer androidServer;
+private static Label serverStatus;
 
 public static void main(String[] args) {
 	androidServer = new AndroidServer(log);
@@ -42,48 +47,21 @@ public static void main(String[] args) {
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setVisible(true);
 	Panel panel = new Panel();
+	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	frame.add(panel);
 	panel.add(new JLabel(new ImageIcon("main_theme.png")));
-	panel.add(new MyButton("full cycle", new ActionListener() {
+	panel.add(new Label("1. Запустите Bluestacks вручную"));
+	panel.add(new MyButton("2. Подсоединитесь к bluestacks нажав эту кнопку", new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			fullCycle();
 		}
 	}));
-	panel.add(new MyButton("bluestacks and ui test", new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			startBluestacksAndLaunchGradleUiTest();
-		}
-	}));
-	Button breakAndroid = new Button("break android");
-	breakAndroid.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			androidServer.breakAndroid = !androidServer.breakAndroid;
-			breakAndroid.setLabel(androidServer.breakAndroid ? "enable android" : "break android");
-		}
-	});
-	panel.add(breakAndroid);
-	panel.add(new MyButton("back", new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			androidServer.back++;
-		}
-	}));
-	panel.add(new MyButton("ui test thread", new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			UITestThread uiTestThread = new UITestThread();
-			uiTestThread.start();
-		}
-	}));
-	panel.add(new MyButton("stop bluestacks", new AbstractAction() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			stopBluestacks();
-		}
-	}));
+	panel.add(new Label("3. Дождитесь появления статуса"));
+	statusLabel = new Label("4. Статус: ожидание");
+	serverStatus = new Label();
+	panel.add(serverStatus);
+	panel.add(statusLabel);
 	frame.setSize(601, 601);
 	fullCycle();
 }
@@ -99,11 +77,12 @@ private static void fullCycle() {
 public static boolean isWorking() {
 	LibAll.HttpRequest.Response response = LibAll.request(jreParams.statusUrl).log(MainJre.log).attempts(3).get();
 	boolean result = response.success && "working".equals(response.str);
+	serverStatus.setText("5. Состояние сервера narcos-mac.herokuapp.com : " + response.str);
 	return result;
 }
 
 private static void checkAndGo() {
-	if(isWorking()) {
+//	if(isWorking()) {
 		int attempts = 0;
 		while(true) {
 			log.info("attempt " + (++attempts));
@@ -113,7 +92,7 @@ private static void checkAndGo() {
 			}
 		}
 		stopBluestacks();
-	}
+//	}
 }
 
 private static void stopBluestacks() {
@@ -141,7 +120,7 @@ private static void stopBluestacks() {
 private static boolean startBluestacksAndLaunchGradleUiTest() {
 	log.info("start bluestacks with gradle ui test, wait device");
 	if(true) {
-		LibAll.nativeCmd("open /Applications/BlueStacks.app/").log(log).execute();
+//		LibAll.nativeCmd("open /Applications/BlueStacks.app/").log(log).execute();
 	}
 	//LibAll.nativeCmd(jreParams.adbPath + " wait-for-device").log(log).execute();
 	while(!LibAllGwt.strEquals("1", LibAll.nativeCmd(jreParams.adbPath + " shell getprop sys.boot_completed").execute().resultStr.trim())) {
@@ -167,8 +146,13 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 			androidServer.pause=true;
 		}
 		if(!androidServer.alive()) {
+			statusLabel.setText("Статус: ОШИБКА!. Попробуйте перезагрузить компьютер и повторить");
 			uiTestThread.terminate();
 			return false;
+		}
+		if(androidServer.alive() && androidServer.isConnected()) {
+			statusLabel.setText("Статус: Успешно");
+
 		}
 	}
 }
