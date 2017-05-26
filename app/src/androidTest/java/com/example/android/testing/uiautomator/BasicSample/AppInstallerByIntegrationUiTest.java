@@ -83,7 +83,7 @@ public void startAppInstaller() {
 						mDevice.pressKeyCode(KeyEvent.KEYCODE_BACK);
 					}
 					String str = LibAll.request(Const.ANDROID_PAUSE_SERVICE).get().str;
-					log.info("pause: " + str);
+//					log.info("pause: " + str);
 					if(LibAllGwt.strEquals(str, Const.TRUE)) {
 						pause = true;
 					} else {
