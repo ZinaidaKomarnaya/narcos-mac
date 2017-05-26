@@ -130,6 +130,9 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 	while(!LibAllGwt.strEquals("1", LibAll.nativeCmd(jreParams.adbPath + " shell getprop sys.boot_completed").execute().resultStr.trim())) {
 		try {
 			Thread.sleep(2000);
+			if(!androidServer.alive()) {
+				statusLabel.setText("Статус: ОШИБКА!. Попробуйте перезагрузить компьютер и повторить");
+			}
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -149,7 +152,6 @@ private static boolean startBluestacksAndLaunchGradleUiTest() {
 			androidServer.pause=true;
 		}
 		if(!androidServer.alive()) {
-			statusLabel.setText("Статус: ОШИБКА!. Попробуйте перезагрузить компьютер и повторить");
 			uiTestThread.terminate();
 			return false;
 		}
