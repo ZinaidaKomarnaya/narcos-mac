@@ -9,11 +9,13 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
 import ru.gg.lib.LibAll;
 import ru.gg.lib_gwt.Const;
 import ru.gg.lib_gwt.ILog;
 import ru.gg.lib_gwt.LibAllGwt;
+import ru.gg.lib_gwt.TimeTerminator;
 
 public class MainJre {
 private static final int WAIT_ANDROID = Const.ONLY_LOGIN ? 7 : 11;
@@ -109,22 +111,40 @@ private static void stopBluestacks() {
 	}
 }
 
+private static boolean deviceReady() {
+	return LibAllGwt.strEquals("1", LibAll.nativeCmd(jreParams.adbPath + " shell getprop sys.boot_completed").execute().resultStr.trim());
+}
+
 private static boolean startBluestacksAndLaunchGradleUiTest() {
 	log.info("start bluestacks with gradle ui test, wait device");
-	if(true) {
-//		LibAll.nativeCmd("open /Applications/BlueStacks.app/").log(log).execute();
+	boolean testMode = true;
+	if(testMode) {
+		for(int i=0; i < 3 && !deviceReady(); i++) {
+			LibAll.nativeCmd("killall bstservice").log(log).execute();
+			LibAll.nativeCmd("killall BlueStacks").log(log).execute();
+			LibAll.nativeCmd("killall VBoxSVC").log(log).execute();
+			LibAll.nativeCmd("killall VBoxXPCOMIPCD").log(log).execute();
+			LibAll.nativeCmd("open /Applications/BlueStacks.app/").log(log).execute();
+			LibAll.sleep(40 * 1000);
+			LibAll.nativeCmd(jreParams.adbPath + "kill-server");
+			LibAll.sleep(10 * 1000);
+			LibAll.nativeCmd(jreParams.adbPath + "start-server");
+			LibAll.sleep(10 * 1000);
+			LibAll.nativeCmd(jreParams.adbPath + " wait-for-device").log(log).terminator(new TimeTerminator(20*1000)).execute();
+		}
 	}
-	//LibAll.nativeCmd(jreParams.adbPath + " wait-for-device").log(log).execute();
-	LibAll.nativeCmd(jreParams.adbPath + "kill-server");
-	LibAll.nativeCmd(jreParams.adbPath + "start-server");
-	while(!LibAllGwt.strEquals("1", LibAll.nativeCmd(jreParams.adbPath + " shell getprop sys.boot_completed").execute().resultStr.trim())) {
-		try {
-			Thread.sleep(2000);
-			if(!androidServer.alive()) {
-				statusLabel.setText("Статус: ОШИБКА!. Попробуйте перезагрузить компьютер и повторить");
+	while(!deviceReady()) {
+		if(testMode) {
+			statusLabel.setText("Статус: ОШИБКА!. Попробуйте перезагрузить компьютер и повторить");
+		} else {
+			try {
+				Thread.sleep(2000);
+				if(!androidServer.alive()) {
+					statusLabel.setText("Статус: ОШИБКА!. Попробуйте перезагрузить компьютер и повторить");
+				}
+			} catch(InterruptedException e) {
+				e.printStackTrace();
 			}
-		} catch(InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 	log.info("device comming");
